@@ -21,14 +21,15 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 
-#Definindo a lista de stopwords
+#Setting a list with stopwords
 stopwords= set(STOPWORDS)
 
 #webpage 
 bp_transcripts = 'https://www.cnnbrasil.com.br/politica/2020/05/22/leia-a-integra-da-transcricao-da-reuniao-ministerial-com-bolsonaro'
 
+#Getting the content from the webpage
 def get_soup(html):
-    """ get data for web page"""
+    
     resp = requests.get(html)
     http_encoding = resp.encoding if 'charset' in resp.headers.get('content-type', '').lower() else None
     html_encoding = EncodingDetector.find_declared_encoding(resp.content, is_html=True)
@@ -36,14 +37,14 @@ def get_soup(html):
     soup = BeautifulSoup(resp.content, from_encoding=encoding)
     return soup
 
+#filtering to pull back only the related text
 def get_text(soup):
-    """ Get links from a web page """
     all_text = [] 
     for i in soup.find_all('p'):
-        # if link['href'][0] != '/': 
             all_text.append(i.get_text())
     return all_text 
 
+#Filtering to Bolsonaro's Talks
 def filter_bolsonaro(alltxt):
     right_texts = []
     for i in alltxt:
